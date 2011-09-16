@@ -97,9 +97,7 @@ NEW_TEST(hash_overrides)
 	assert_ptr_eq("set (2nd) succeeds (returning prev. value ptr)", value1, hash_set(h, "key", value2));
 	assert_str_eq("get (2nd) succeeds", "value2", hash_get(h, "key"));
 
-	hash_free(h);
-	free(value1);
-	free(value2);
+	hash_free_all(h);
 }
 
 NEW_TEST(hash_get_null)
