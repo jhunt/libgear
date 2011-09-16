@@ -53,7 +53,7 @@ test: test/run
 
 coverage:
 	$(LCOV) --capture -o $@.tmp
-	$(LCOV) --remove $@.tmp > lcov.info
+	$(LCOV) --remove $@.tmp log.c > lcov.info
 	rm -f $@.tmp
 	rm -rf doc/coverage
 	mkdir -p doc
