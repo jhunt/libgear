@@ -620,6 +620,23 @@ NEW_TEST(stringlist_split)
 	stringlist_free(list);
 }
 
+NEW_TEST(stringlist_intersect)
+{
+	struct stringlist *X, *Y;
+	struct stringlist *intersect;
+
+	test("stringlist: intersection");
+	X = setup_list("l", "m", "n", NULL);
+	Y = setup_list("m", "n", "o", "p", NULL);
+	intersect = stringlist_intersect(X, Y);
+
+	assert_stringlist(intersect, "X intersect Y", 2, "m", "n");
+
+	stringlist_free(intersect);
+	stringlist_free(X);
+	stringlist_free(Y);
+}
+
 NEW_TEST(stringlist_free_null)
 {
 	struct stringlist *sl;
@@ -679,6 +696,8 @@ NEW_SUITE(string)
 
 	RUN_TEST(stringlist_join);
 	RUN_TEST(stringlist_split);
+
+	RUN_TEST(stringlist_intersect);
 
 	RUN_TEST(stringlist_free_null);
 
