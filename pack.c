@@ -19,6 +19,7 @@
 
 #include <assert.h>
 #include <stdarg.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -105,19 +106,19 @@ static size_t _packlen(const char *prefix, const char *format, va_list args)
 
 		case 'c': /* signed char   (8-bit) */
 		case 'C': /* unsigned char (8-bit) */
-			va_arg(args, unsigned long);
+			va_arg(args, uint32_t); /* throw away value */
 			len += 2; /* '5f' */
 			break;
 
 		case 's': /* signed short   (16-bit) */
 		case 'S': /* unsigned short (16-bit) */
-			va_arg(args, unsigned long);
+			va_arg(args, uint32_t); /* throw away value */
 			len += 4; /* 'cd4f' */
 			break;
 
 		case 'l': /* signed long   (32-bit) */
 		case 'L': /* unsigned long (32-bit) */
-			va_arg(args, unsigned long);
+			va_arg(args, uint32_t); /* throw away value */
 			len += 8; /* '00cc18f3' */
 			break;
 		}
@@ -189,9 +190,9 @@ char* pack(const char *prefix, const char *format, ...)
 
 	union {
 		char    *string;
-		unsigned char  u8;
-		unsigned short u16;
-		unsigned long  u32;
+		uint8_t   u8;
+		uint16_t  u16;
+		uint32_t  u32;
 	} variadic;
 
 	va_start(args, format);
@@ -220,7 +221,7 @@ char* pack(const char *prefix, const char *format, ...)
 			break;
 
 		case 'c': /* signed char (8-bit) */
-			variadic.u8 = (unsigned char)va_arg(args, signed int);
+			variadic.u8 = (int8_t)va_arg(args, signed int);
 			n = 2; len -= n;
 			if (len > 0) {
 				p += snprintf(p, n+1, "%02x", variadic.u8);
@@ -228,7 +229,7 @@ char* pack(const char *prefix, const char *format, ...)
 			break;
 
 		case 'C': /* unsigned char (8-bit) */
-			variadic.u8 = (unsigned char)va_arg(args, unsigned int);
+			variadic.u8 = (uint8_t)va_arg(args, unsigned int);
 			n = 2; len -= n;
 			if (len >= 0) {
 				p += snprintf(p, n+1, "%02x", variadic.u8);
@@ -236,7 +237,7 @@ char* pack(const char *prefix, const char *format, ...)
 			break;
 
 		case 's': /* signed short (16-bit) */
-			variadic.u16 = (unsigned short)va_arg(args, signed int);
+			variadic.u16 = (int16_t)va_arg(args, signed int);
 			n = 4; len -= n;
 			if (len > 0) {
 				p += snprintf(p, n+1, "%04x", variadic.u16);
@@ -244,7 +245,7 @@ char* pack(const char *prefix, const char *format, ...)
 			break;
 
 		case 'S': /* unsigned short (16-bit) */
-			variadic.u16 = (unsigned short)va_arg(args, unsigned int);
+			variadic.u16 = (uint16_t)va_arg(args, unsigned int);
 			n = 4; len -= n;
 			if (len > 0) {
 				p += snprintf(p, n+1, "%04x", variadic.u16);
@@ -252,7 +253,7 @@ char* pack(const char *prefix, const char *format, ...)
 			break;
 
 		case 'l': /* signed long (32-bit) */
-			variadic.u32 = va_arg(args, signed long);
+			variadic.u32 = (int32_t)va_arg(args, signed long);
 			n = 8; len -= n;
 			if (len > 0) {
 				p += snprintf(p, n+1, "%08lx", variadic.u32);
@@ -260,7 +261,7 @@ char* pack(const char *prefix, const char *format, ...)
 			break;
 
 		case 'L': /* unsigned long (32-bit) */
-			variadic.u32 = va_arg(args, unsigned long);
+			variadic.u32 = (uint32_t)va_arg(args, unsigned long);
 			n = 8; len -= n;
 			if (len > 0) {
 				p += snprintf(p, n+1, "%08lx", variadic.u32);
@@ -334,37 +335,37 @@ int unpack(const char *packed, const char *prefix, const char *format, ...)
 			memcpy(hex, packed, 2);
 			hex[2] = '\0';
 			packed += 2;
-			*(va_arg(args, signed char *)) = strtol(hex, NULL, 16);
+			*(va_arg(args, int8_t *)) = strtol(hex, NULL, 16);
 			break;
 		case 'C': /* unsigned char  (8-bit) */
 			memcpy(hex, packed, 2);
 			hex[2] = '\0';
 			packed += 2;
-			*(va_arg(args, unsigned char *)) = strtoul(hex, NULL, 16);
+			*(va_arg(args, uint8_t *)) = strtoul(hex, NULL, 16);
 			break;
 		case 's': /* signed short   (16-bit) */
 			memcpy(hex, packed, 4);
 			hex[4] = '\0';
 			packed += 4;
-			*(va_arg(args, signed short *)) = strtol(hex, NULL, 16);
+			*(va_arg(args, int16_t *)) = strtol(hex, NULL, 16);
 			break;
 		case 'S': /* unsigned short (16-bit) */
 			memcpy(hex, packed, 4);
 			hex[4] = '\0';
 			packed += 4;
-			*(va_arg(args, unsigned short *)) = strtoul(hex, NULL, 16);
+			*(va_arg(args, uint16_t *)) = strtoul(hex, NULL, 16);
 			break;
 		case 'l': /* signed long    (32-bit) */
 			memcpy(hex, packed, 8);
 			hex[8] = '\0';
 			packed += 8;
-			*(va_arg(args, signed long *)) = strtoll(hex, NULL, 16);
+			*(va_arg(args, int32_t *)) = strtoll(hex, NULL, 16);
 			break;
 		case 'L': /* unsigned long  (32-bit) */
 			memcpy(hex, packed, 8);
 			hex[8] = '\0';
 			packed += 8;
-			*(va_arg(args, unsigned long *)) = strtoull(hex, NULL, 16);
+			*(va_arg(args, uint32_t *)) = strtoull(hex, NULL, 16);
 			break;
 		}
 	}

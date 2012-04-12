@@ -38,7 +38,7 @@ test_o  += test/list.o
 default: libgear.so
 
 install: default
-	install -o root -g root -m 0644 $(SONAME).$(VERSION) /usr/lib
+	install -o root -g root -m 0644 $(SONAME).$(VERSION) $(LIBDIR)
 	install -o root -g root -m 0644 gear.h /usr/include
 	ldconfig
 
