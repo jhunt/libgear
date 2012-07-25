@@ -67,7 +67,7 @@ static int _deref(char **buf, size_t *len, const char *start, const char *end, c
 	char *ref = _extract(start, end);
 	char *val = _lookup(ref, ctx);
 
-	printf("deref ::%s:: -> '%s'\n", ref, val);
+	DEBUG("string:deref ::%s:: -> '%s'\n", ref, val);
 
 	strncat(*buf, val, *len);
 	for (; **buf; (*buf)++, (*len)--)
