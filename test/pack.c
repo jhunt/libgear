@@ -435,6 +435,25 @@ NEW_TEST(pack_failure)
 	               &s1, &s2, &s3));
 }
 
+NEW_TEST(pack_overflow)
+{
+	unsigned long long ull;
+	test("pack: Pack Integer Overflow");
+
+	ull = 0xdecafbad00;
+	char *packed;
+	unsigned long long unpacked;
+
+	packed = pack("overflow::", "L", ull);
+	assert_not_null("pack succeeds with unsigned long long", packed);
+
+	assert_str_eq("packed format is correct", packed, "overflow::cafbad00");
+
+	assert_int_eq("unpack succeeds", 0,
+		unpack(packed, "overflow::", "L", &unpacked));
+
+}
+
 NEW_SUITE(pack) {
 	RUN_TEST(pack_encoding_integers);
 	RUN_TEST(pack_encoding_strings);
@@ -448,5 +467,6 @@ NEW_SUITE(pack) {
 
 	RUN_TEST(pack_bad_format);
 
+	RUN_TEST(pack_overflow);
 	RUN_TEST(pack_failure);
 }

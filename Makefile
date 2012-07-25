@@ -25,7 +25,7 @@ GENHTML := genhtml --prefix $(shell dirname `pwd`)
 CDOC    := cdoc
 
 SONAME  := libgear.so
-VERSION := 1.0.0
+VERSION := 1.0.1
 
 test_o  := test/hash.o
 test_o  += test/path.o
@@ -38,8 +38,10 @@ test_o  += test/list.o
 default: libgear.so
 
 install: default
-	install -o root -g root -m 0644 $(SONAME).$(VERSION) /usr/lib
-	install -o root -g root -m 0644 gear.h /usr/include
+	install -d -o root -g root -m 0755 $(DESTDIR)$(LIBDIR)
+	install -o root -g root -m 0644 $(SONAME).$(VERSION) $(DESTDIR)$(LIBDIR)
+	install -d -o root -g root -m 0755 $(DESTDIR)/usr/include
+	install -o root -g root -m 0644 gear.h $(DESTDIR)/usr/include
 	ldconfig
 
 .PHONY: clean
