@@ -240,7 +240,7 @@ char* pack(const char *prefix, const char *format, ...)
 			variadic.u16 = (int16_t)va_arg(args, signed int);
 			n = 4; len -= n;
 			if (len > 0) {
-				p += snprintf(p, n+1, "%04x", variadic.u16);
+				p += snprintf(p, n+1, "%04x", (signed int)variadic.u16);
 			}
 			break;
 
@@ -248,7 +248,7 @@ char* pack(const char *prefix, const char *format, ...)
 			variadic.u16 = (uint16_t)va_arg(args, unsigned int);
 			n = 4; len -= n;
 			if (len > 0) {
-				p += snprintf(p, n+1, "%04x", variadic.u16);
+				p += snprintf(p, n+1, "%04x", (unsigned int)variadic.u16);
 			}
 			break;
 
@@ -256,7 +256,7 @@ char* pack(const char *prefix, const char *format, ...)
 			variadic.u32 = (int32_t)va_arg(args, signed long);
 			n = 8; len -= n;
 			if (len > 0) {
-				p += snprintf(p, n+1, "%08lx", variadic.u32);
+				p += snprintf(p, n+1, "%08lx", (signed long)variadic.u32);
 			}
 			break;
 
@@ -264,7 +264,7 @@ char* pack(const char *prefix, const char *format, ...)
 			variadic.u32 = (uint32_t)va_arg(args, unsigned long);
 			n = 8; len -= n;
 			if (len > 0) {
-				p += snprintf(p, n+1, "%08lx", variadic.u32);
+				p += snprintf(p, n+1, "%08lx", (unsigned long)variadic.u32);
 			}
 			break;
 		}

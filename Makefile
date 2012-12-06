@@ -25,7 +25,7 @@ GENHTML := genhtml --prefix $(shell dirname `pwd`)
 CDOC    := cdoc
 
 SONAME  := libgear.so
-VERSION := 1.0.1
+VERSION := 1.0.2
 
 test_o  := test/hash.o
 test_o  += test/path.o
